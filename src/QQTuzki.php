@@ -12,6 +12,12 @@ use Slince\Tuzki\Cogitation\ItpkCogitation;
 class QQTuzki
 {
     /**
+     * 兔斯基名
+     * @var string
+     */
+    protected $name;
+
+    /**
      * 监听的qq群
      * @var array
      */
@@ -40,18 +46,60 @@ class QQTuzki
     protected $tuzki;
 
     /**
+     * 安静模式
+     * @var bool
+     */
+    protected $quiteMode = false;
+
+    /**
      * 二维码位置
      * @var string
      */
     protected $qrCodePath;
 
+    /**
+     * 消息发送最大尝试次数
+     * @var int
+     */
     protected $maxAttempts = 10;
 
-    public function __construct($qrCodePath)
+    public function __construct($qrCodePath, Tuzki $tuzki)
     {
         $this->qrCodePath = $qrCodePath;
         $this->smartQQ = new SmartQQ();
-        $this->tuzki = new Tuzki(new ItpkCogitation('27bad0c963b9f4a460dd5e1cb6ad76b0', 'vkq6b8qjot7j'));
+        $this->tuzki = $tuzki;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param boolean $quiteMode
+     */
+    public function setQuiteMode($quiteMode)
+    {
+        $this->quiteMode = $quiteMode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getQuiteMode()
+    {
+        return $this->quiteMode;
     }
 
     /**
@@ -97,24 +145,7 @@ class QQTuzki
     {
         $filterMessages = [];
         foreach ($messages as $message) {
-            $pass = false;
-            switch ($message->type) {
-                case Message::TYPE_FRIEND:
-                    if (empty($this->listenFriends) ) {
-                        $pass = true;
-                    }
-                    break;
-                case Message::TYPE_DISCUS:
-                    if (empty($this->listenDiscuses) ) {
-                        $pass = true;
-                    }
-                    break;
-                case Message::TYPE_GROUP:
-                    if (empty($this->listenGroups) ) {
-                        $pass = true;
-                    }
-                    break;
-            }
+            $pass = !$this->quiteMode || strpos($message->content, $this->name) !== false;
             $pass && $filterMessages[] = $message;
         }
         return $filterMessages;

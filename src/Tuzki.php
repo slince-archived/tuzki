@@ -49,4 +49,22 @@ class Tuzki
         }
         return $this->cogitation->cogitate($question);
     }
+
+    /**
+     * 获取当前思考方式
+     * @return CogitationInterface
+     */
+    public function getCogitation()
+    {
+        return $this->cogitation;
+    }
+
+    /**
+     * 更换思考方式
+     * @param CogitationInterface $cogitation
+     */
+    public function setCogitation($cogitation)
+    {
+        $this->cogitation = $cogitation;
+    }
 }

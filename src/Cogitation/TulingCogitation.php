@@ -10,31 +10,28 @@ use GuzzleHttp\Psr7\Request;
 use Slince\Tuzki\Question;
 use Slince\Tuzki\Answer;
 
-class ItpkCogitation extends AbstractCogitation
+class TulingCogitation extends AbstractCogitation
 {
     /**
      * 思考方式命名
      * @var string
      */
-    const NAME = 'itpk';
+    const NAME = 'tuling';
 
-    protected $api = 'http://i.itpk.cn/api.php';
+    protected $api = 'http://www.tuling123.com/openapi/api';
 
     protected $key;
-
-    protected $secret;
 
     /**
      * @var Client
      */
     protected $httpClient;
 
-    function __construct($key, $secret)
+    function __construct($key)
     {
         $this->key = $key;
-        $this->secret = $secret;
         $this->httpClient = new Client([
-//            'proxy' => 'tcp://127.0.0.1:8888'
+            'proxy' => 'tcp://127.0.0.1:8888'
         ]);
     }
 
@@ -44,17 +41,26 @@ class ItpkCogitation extends AbstractCogitation
      */
     function cogitate(Question $question)
     {
-        $request = new Request('GET', $this->api);
+        $request = new Request('POST', $this->api);
         try {
             $response = $this->httpClient->send($request, [
-                'query' => [
-                    'api_key' => $this->key,
-                    'api_secret' => $this->secret,
-                    'question' => strval($question)
+                'form_params' => [
+                    'key' => $this->key,
+                    'info' => strval($question),
                 ]
             ]);
             if ($response->getStatusCode() == 200) {
-                $answer = new Answer(strval($response->getBody()), $question);
+                $jsonData = \GuzzleHttp\json_decode($response->getBody(), true);
+                $message = $jsonData['text'];
+                switch ($jsonData['code']) {
+                    case 40001:
+                    case 40002:
+                    case 40007:
+                    case 40004:
+                        $message = "聊累了，明天请早吧~";
+                        break;
+                }
+                $answer = new Answer($message, $question);
                 $question->setAnswer($answer);
                 return $answer;
             }
