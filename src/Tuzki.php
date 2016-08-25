@@ -5,17 +5,48 @@
  */
 namespace Slince\Tuzki;
 
-use GuzzleHttp\Client;
+use Slince\Tuzki\Cogitation\CogitationInterface;
+use Slince\Tuzki\Exception\InvalidArgumentException;
 
 class Tuzki
 {
     /**
-     * @var Client
+     * 思考方式
+     * @var CogitationInterface
      */
-    protected $httpClient;
+    protected $cogitation;
 
-    function listen(MessageInterface $message)
+    /**
+     * 所有的提问
+     * @var Message[]
+     */
+    protected $questions = [];
+
+    function __construct(CogitationInterface $cogitation)
     {
-        
+        $this->cogitation = $cogitation;
+    }
+
+    /**
+     * @param $message
+     * @return $this
+     */
+    function listen($message)
+    {
+        $this->questions[] = new Question($message);
+        return $this;
+    }
+
+    /**
+     * 回答
+     * @return bool|Answer
+     */
+    function answer()
+    {
+        $question = end($this->questions);
+        if ($question === false) {
+            throw new InvalidArgumentException("Cannot find question");
+        }
+        return $this->cogitation->cogitate($question);
     }
 }

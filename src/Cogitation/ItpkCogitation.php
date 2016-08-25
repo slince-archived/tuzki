@@ -1,16 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: ACER
- * Date: 2016/8/25
- * Time: 12:20
+ * Slince tuzki library
+ * @author Tao <taosikai@yeah.net>
  */
-
 namespace Slince\Tuzki\Cogitation;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use Slince\Tuzki\Message;
+use Slince\Tuzki\Question;
+use Slince\Tuzki\Answer;
 
 class ItpkCogitation extends AbstractCogitation
 {
@@ -29,13 +27,16 @@ class ItpkCogitation extends AbstractCogitation
     {
         $this->key = $key;
         $this->secret = $secret;
+        $this->httpClient = new Client([
+            'proxy' => 'tcp://127.0.0.1:8888'
+        ]);
     }
 
     /**
-     * @param Message $message
-     * @return bool|Message
+     * @param Question $question
+     * @return false|Question
      */
-    function cogitate(Message $message)
+    function cogitate(Question $question)
     {
         $request = new Request('GET', $this->api);
         try {
@@ -43,11 +44,13 @@ class ItpkCogitation extends AbstractCogitation
                 'query' => [
                     'api_key' => $this->key,
                     'api_secret' => $this->secret,
-                    'question' => $message
+                    'question' => strval($question)
                 ]
             ]);
             if ($response->getStatusCode() == 200) {
-                return new Message(strval($response->getBody()));
+                $answer = new Answer(strval($response->getBody()), $question);
+                $question->setAnswer($answer);
+                return $answer;
             }
         } catch (\Exception $e) {
         }

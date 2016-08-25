@@ -5,14 +5,15 @@
  */
 namespace Slince\Tuzki\Cogitation;
 
-use Slince\Tuzki\Message;
+use Slince\Tuzki\Question;
+use Slince\Tuzki\Answer;
 
 interface CogitationInterface
 {
     /**
      * 思考答案，思考失败返回false
-     * @param Message $message
-     * @return bool|string
+     * @param Question $message
+     * @return bool|Answer
      */
-    function cogitate(Message $message);
+    function cogitate(Question $message);
 }
