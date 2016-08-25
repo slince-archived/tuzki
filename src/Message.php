@@ -20,7 +20,7 @@ class Message implements MessageInterface
 
     function __toString()
     {
-        return $this->content;
+        return strval($this->content);
     }
 
     /**

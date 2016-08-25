@@ -74,7 +74,11 @@ class QQTuzki
     {
         $this->smartQQ->login($this->qrCodePath);
         while (true) {
-            $messages = $this->smartQQ->pollMessages();
+            try {
+                $messages = $this->smartQQ->pollMessages();
+            } catch (\Exception $e) {
+                $messages = [];
+            }
             if (empty($messages)) {
                 sleep(1);
             } else {
