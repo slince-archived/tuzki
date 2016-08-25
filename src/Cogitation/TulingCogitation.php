@@ -30,9 +30,7 @@ class TulingCogitation extends AbstractCogitation
     function __construct($key)
     {
         $this->key = $key;
-        $this->httpClient = new Client([
-            'proxy' => 'tcp://127.0.0.1:8888'
-        ]);
+        $this->httpClient = new Client();
     }
 
     /**

@@ -117,7 +117,10 @@ class QQTuzki
     {
         return $this->maxAttempts;
     }
-    
+
+    /**
+     * 监听消息并及时回复
+     */
     public function listen()
     {
         $this->smartQQ->login($this->qrCodePath);
@@ -128,7 +131,7 @@ class QQTuzki
                 $messages = [];
             }
             if (empty($messages)) {
-                sleep(1);
+                sleep(2);
             } else {
                 foreach ($this->filterMessages($messages) as $message) {
                     $this->handleMessage($message);
@@ -145,7 +148,8 @@ class QQTuzki
     {
         $filterMessages = [];
         foreach ($messages as $message) {
-            $pass = !$this->quiteMode || strpos($message->content, $this->name) !== false;
+            //好友消息、非安静模式、以及提到兔斯基姓名的消息需要回复
+            $pass = $message == Message::TYPE_FRIEND || !$this->quiteMode || strpos($message->content, $this->name) !== false;
             $pass && $filterMessages[] = $message;
         }
         return $filterMessages;

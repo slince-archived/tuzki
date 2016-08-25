@@ -8,6 +8,7 @@ namespace Slince\Tuzki\Command;
 use Slince\Tuzki\Cogitation\ItpkCogitation;
 use Slince\Tuzki\Cogitation\TulingCogitation;
 use Slince\Tuzki\QQTuzki;
+use Slince\Tuzki\Tuzki;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,24 +17,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class QQCommand extends BaseCommand
 {
-    protected $name = 'qq';
+    const NAME = 'qq';
 
     function configure()
     {
-        $this->addOption('quite', 'q', InputOption::VALUE_OPTIONAL, "Quite Mode, Tuzki only reply when mention his name", false)
-            ->addArgument('cogitation', InputArgument::OPTIONAL, "Tuzki way of thinking", TulingCogitation::NAME)
-            ->addArgument('key', InputArgument::REQUIRED, "Robot key")
-            ->addArgument('secret', InputArgument::OPTIONAL, "Robot secret")
-            ->addArgument('qr', InputArgument::OPTIONAL, "Qr code image path", getcwd() . '/qr.png');
+        $this->setName(static::NAME);
+        $this->addOption('quite', null, InputOption::VALUE_OPTIONAL, "Quite Mode, Tuzki only reply when mention his name", false)
+            ->addOption('key', null, InputOption::VALUE_REQUIRED, "Robot key")
+            ->addOption('secret', null, InputOption::VALUE_OPTIONAL, "Robot secret")
+            ->addOption('cogitation', null, InputOption::VALUE_OPTIONAL, "Tuzki way of thinking", TulingCogitation::NAME)
+            ->addOption('qr', null, InputOption::VALUE_OPTIONAL, "Qr code image path", getcwd() . '/qr.png');
     }
 
     function execute(InputInterface $input, OutputInterface $output)
     {
         $qqTuzki = $this->makeQQTuzki($input);
         try {
-            $output->writeln("You will find a qr code image at [{$input->getArgument('qr')}], please scan it!");
+            $output->writeln("You will find a qr code image at [{$input->getOption('qr')}], please scan it!");
             $qqTuzki->listen();
         } catch (\Exception $e) {
+            throw $e;
             $output->writeln("Please try again!");
         }
     }
@@ -44,17 +47,18 @@ class QQCommand extends BaseCommand
      */
     protected function makeQQTuzki(InputInterface $input)
     {
-        $cogitation = $input->getArgument('cogitation');
+        $cogitation = $input->getOption('cogitation');
         switch ($cogitation) {
             case ItpkCogitation::NAME:
-                $tuzki = new ItpkCogitation($input->getArgument('key'), $input->getArgument('secret'));
+                $cogitation = new ItpkCogitation($input->getOption('key'), $input->getOption('secret'));
                 break;
             default:
-                $tuzki = new TulingCogitation($input->getArgument('key'));
+                $cogitation = new TulingCogitation($input->getOption('key'));
                 break;
         }
-        $qqTuzki = new QQTuzki($input->getArgument('qr'), $tuzki);
-        if ($input->getArgument('quite')) {
+        $tuzki = new Tuzki($cogitation);
+        $qqTuzki = new QQTuzki($input->getOption('qr'), $tuzki);
+        if ($input->getOption('quite')) {
             $qqTuzki->setQuiteMode(true);
         }
         return $qqTuzki;
