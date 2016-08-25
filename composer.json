@@ -1,0 +1,34 @@
+{
+    "name": "slince/tuzki",
+    "description": "Tuzki",
+    "type": "project",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "tao",
+            "email": "taosikai@yeah.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Slince\\Tuzki\\": "./src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Slince\\Tuzki\\Tests\\": "./tests"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "guzzlehttp/guzzle": "^6.2",
+        "symfony/filesystem": "^3.1",
+        "slince/cache": "^1.0",
+        "cakephp/utility": "^3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1",
+        "squizlabs/php_codesniffer": "^2.6"
+    },
+    "minimum-stability": "stable"
+}
