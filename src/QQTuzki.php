@@ -63,8 +63,9 @@ class QQTuzki
      */
     protected $maxAttempts = 10;
 
-    public function __construct($qrCodePath, Tuzki $tuzki)
+    public function __construct($name, $qrCodePath, Tuzki $tuzki)
     {
+        $this->name = $name;
         $this->qrCodePath = $qrCodePath;
         $this->smartQQ = new SmartQQ();
         $this->tuzki = $tuzki;
