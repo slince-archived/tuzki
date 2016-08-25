@@ -28,7 +28,7 @@ class ItpkCogitation extends AbstractCogitation
         $this->key = $key;
         $this->secret = $secret;
         $this->httpClient = new Client([
-            'proxy' => 'tcp://127.0.0.1:8888'
+//            'proxy' => 'tcp://127.0.0.1:8888'
         ]);
     }
 
