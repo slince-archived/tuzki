@@ -22,7 +22,7 @@ class QQCommand extends BaseCommand
     function configure()
     {
         $this->setName(static::NAME);
-        $this->addOption('name', null, InputOption::VALUE_REQUIRED, "Tuzki name, You can call him in the group or discuss")
+        $this->addArgument('name', InputArgument::REQUIRED, "Tuzki name, You can call him in the group or discuss")
             ->addOption('quite', null, InputOption::VALUE_NONE, "Quite Mode, Tuzki only reply when mention his name")
             ->addOption('key', null, InputOption::VALUE_REQUIRED, "Robot key")
             ->addOption('secret', null, InputOption::VALUE_OPTIONAL, "Robot secret")
@@ -57,7 +57,7 @@ class QQCommand extends BaseCommand
                 break;
         }
         $tuzki = new Tuzki($cogitation);
-        $qqTuzki = new QQTuzki($input->getOption('name'), $input->getOption('qr'), $tuzki);
+        $qqTuzki = new QQTuzki($input->getArgument('name'), $input->getOption('qr'), $tuzki);
         if ($input->getOption('quite')) {
             $qqTuzki->setQuiteMode(true);
         }

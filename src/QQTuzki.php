@@ -150,7 +150,8 @@ class QQTuzki
         $filterMessages = [];
         foreach ($messages as $message) {
             //好友消息、非安静模式、以及提到兔斯基姓名的消息需要回复
-            $pass = $message == Message::TYPE_FRIEND || !$this->quiteMode || strpos($message->content, $this->name) !== false;
+            $pass = $message->type == Message::TYPE_FRIEND || !$this->quiteMode
+                || strpos($message->content, $this->name) !== false;
             $pass && $filterMessages[] = $message;
         }
         return $filterMessages;
