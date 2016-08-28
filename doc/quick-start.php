@@ -12,7 +12,7 @@ echo $answer;
 
 echo PHP_EOL;
 
-$key = '1ae1858d92f53c8dc4fe31778c2d30f6'; //图灵机器人key，可以去官网自行申请
+$key = 'xxx'; //图灵机器人key，可以去官网自行申请
 $tuzki->setCogitation(new TulingCogitation($key));
 
 echo $tuzki->listen('Hello')->answer();
