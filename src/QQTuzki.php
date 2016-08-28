@@ -5,9 +5,9 @@
  */
 namespace Slince\Tuzki;
 
+use Slince\SmartQQ\Exception\ResponseException;
 use Slince\SmartQQ\Model\Message;
 use Slince\SmartQQ\SmartQQ;
-use Slince\Tuzki\Cogitation\ItpkCogitation;
 
 class QQTuzki
 {
@@ -128,7 +128,7 @@ class QQTuzki
         while (true) {
             try {
                 $messages = $this->smartQQ->pollMessages();
-            } catch (\Exception $e) {
+            } catch (ResponseException $e) { //响应异常忽略重新执行，初次之外的异常需要通知
                 $messages = [];
             }
             if (empty($messages)) {
