@@ -7,7 +7,7 @@
 
 基于composer安装,执行下面命令
 ```
-composer global slince/tuzki *@dev
+composer global require slince/tuzki *@dev
 ```
 
 ## 监听QQ
