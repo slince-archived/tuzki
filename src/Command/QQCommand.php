@@ -19,7 +19,7 @@ class QQCommand extends BaseCommand
 {
     const NAME = 'qq';
 
-    function configure()
+    public function configure()
     {
         $this->setName(static::NAME);
         $this->addArgument('name', InputArgument::REQUIRED, "Tuzki name, You can call him in the group or discuss")
@@ -30,15 +30,16 @@ class QQCommand extends BaseCommand
             ->addOption('qr', null, InputOption::VALUE_OPTIONAL, "Qr code image path", getcwd() . '/qr.png');
     }
 
-    function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * 执行
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $qqTuzki = $this->makeQQTuzki($input);
-        try {
-            $output->writeln("You will find a qr code image at [{$input->getOption('qr')}], please scan it!");
-            $qqTuzki->listen();
-        } catch (\Exception $e) {
-            $output->writeln("Please try again!");
-        }
+        $output->writeln("You will find a qr code image at [{$input->getOption('qr')}], please scan it!");
+        $qqTuzki->listen();
     }
 
     /**

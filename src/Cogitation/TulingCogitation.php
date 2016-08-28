@@ -45,6 +45,7 @@ class TulingCogitation extends AbstractCogitation
                 'form_params' => [
                     'key' => $this->key,
                     'info' => strval($question),
+                    'userid' => $question->getOwner()
                 ]
             ]);
             if ($response->getStatusCode() == 200) {

@@ -8,6 +8,7 @@ namespace Slince\Tuzki;
 use Slince\SmartQQ\Exception\ResponseException;
 use Slince\SmartQQ\Model\Message;
 use Slince\SmartQQ\SmartQQ;
+use Slince\Tuzki\Exception\RuntimeException;
 
 class QQTuzki
 {
@@ -168,7 +169,8 @@ class QQTuzki
         $success = false;
         $callable = $this->getMessageHandler($message);
         while (!$success) {
-            $answer = $this->tuzki->listen($message->content)->answer();
+            $question = new Question($message->content, $message->fromUin);
+            $answer = $this->tuzki->listen($question)->answer();
             $success = call_user_func($callable, $answer);
             $success || $times --;
             if ($times <= 0) {
@@ -185,10 +187,6 @@ class QQTuzki
      */
     protected function getMessageHandler(Message $message)
     {
-        static $callables = [];
-        if (isset($callables[$message->type])) {
-            return $callables[$message->type];
-        }
         $callable = null;
         switch ($message->type) {
             case Message::TYPE_FRIEND:
@@ -206,7 +204,9 @@ class QQTuzki
                     return $this->smartQQ->sendMessageToGroup($message->fromUin, $answer->getContent());
                 };
         }
-        $callables[$message->type] = $callable;
+        if (is_null($callable)) {
+            throw new RuntimeException("Undefined message type");
+        }
         return $callable;
     }
 }

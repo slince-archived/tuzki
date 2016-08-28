@@ -28,17 +28,22 @@ class Tuzki
     }
 
     /**
-     * @param $message
+     * 听问题
+     * @param $question
      * @return $this
      */
-    function listen($message)
+    function listen($question)
     {
-        $this->questions[] = new Question($message);
+        //如果是普通的消息
+        if (!$question instanceof Question) {
+            $question = new Question($question, uniqid());
+        }
+        $this->questions[] = $question;
         return $this;
     }
 
     /**
-     * 回答
+     * 回答问题
      * @return bool|Answer
      */
     function answer()
