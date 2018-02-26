@@ -7,7 +7,7 @@ namespace Slince\Tuzki\Command;
 
 use Slince\Tuzki\Cogitation\ItpkCogitation;
 use Slince\Tuzki\Cogitation\TulingCogitation;
-use Slince\Tuzki\QQTuzki;
+use Slince\Tuzki\Tuzki;
 use Slince\Tuzki\Tuzki;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -44,7 +44,7 @@ class QQCommand extends BaseCommand
 
     /**
      * @param InputInterface $input
-     * @return QQTuzki
+     * @return Tuzki
      */
     protected function makeQQTuzki(InputInterface $input)
     {
@@ -58,7 +58,7 @@ class QQCommand extends BaseCommand
                 break;
         }
         $tuzki = new Tuzki($cogitation);
-        $qqTuzki = new QQTuzki($input->getArgument('name'), $input->getOption('qr'), $tuzki);
+        $qqTuzki = new Tuzki($input->getArgument('name'), $input->getOption('qr'), $tuzki);
         if ($input->getOption('quite')) {
             $qqTuzki->setQuiteMode(true);
         }
