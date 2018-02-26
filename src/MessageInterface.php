@@ -11,5 +11,5 @@ interface MessageInterface
      * 获取消息内容
      * @return string
      */
-    function getContent();
+    public function getContent();
 }

@@ -13,7 +13,7 @@ class Answer extends Message
      */
     protected $question;
 
-    function __construct($content, Question $question)
+    public function __construct($content, Question $question)
     {
         parent::__construct($content);
         $this->question = $question;

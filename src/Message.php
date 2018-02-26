@@ -13,12 +13,12 @@ class Message implements MessageInterface
      */
     protected $content;
 
-    function __construct($content)
+    public function __construct($content)
     {
         $this->content = $content;
     }
 
-    function __toString()
+    public function __toString()
     {
         return strval($this->content);
     }

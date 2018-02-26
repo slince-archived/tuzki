@@ -1,8 +1,13 @@
 <?php
-/**
- * Slince tuzki library
- * @author Tao <taosikai@yeah.net>
+/*
+ * This file is part of the slince/tuzki package.
+ *
+ * (c) Slince <taosikai@yeah.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 namespace Slince\Tuzki;
 
 use Slince\Tuzki\Cogitation\CogitationInterface;
@@ -11,7 +16,7 @@ use Slince\Tuzki\Exception\InvalidArgumentException;
 class Tuzki
 {
     /**
-     * 思考方式
+     * 思考方式,图灵，茉莉机器人
      * @var CogitationInterface
      */
     protected $cogitation;
@@ -22,7 +27,7 @@ class Tuzki
      */
     protected $questions = [];
 
-    function __construct(CogitationInterface $cogitation)
+    public function __construct(CogitationInterface $cogitation = null)
     {
         $this->cogitation = $cogitation;
     }
@@ -32,7 +37,7 @@ class Tuzki
      * @param $question
      * @return $this
      */
-    function listen($question)
+    public function listen($question)
     {
         //如果是普通的消息
         if (!$question instanceof Question) {
@@ -46,7 +51,7 @@ class Tuzki
      * 回答问题
      * @return bool|Answer
      */
-    function answer()
+    public function answer()
     {
         $question = end($this->questions);
         if ($question === false) {

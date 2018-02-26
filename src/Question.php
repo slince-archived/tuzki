@@ -1,7 +1,11 @@
 <?php
-/**
- * Slince tuzki library
- * @author Tao <taosikai@yeah.net>
+/*
+ * This file is part of the slince/tuzki package.
+ *
+ * (c) Slince <taosikai@yeah.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace Slince\Tuzki;
 
@@ -19,7 +23,7 @@ class Question extends Message
      */
     protected $answer;
 
-    function __construct($content, $owner)
+    public function __construct($content, $owner)
     {
         parent::__construct($content);
         $this->owner = $owner;
@@ -29,7 +33,7 @@ class Question extends Message
      * 是否已经回答
      * @return bool
      */
-    function isAnswered()
+    public function isAnswered()
     {
         return $this->answer instanceof Answer;
     }
